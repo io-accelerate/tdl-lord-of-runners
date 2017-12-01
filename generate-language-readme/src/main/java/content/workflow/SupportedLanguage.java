@@ -35,16 +35,16 @@ class SupportedLanguage {
             "./lib/solutions");
     static final SupportedLanguage CSHARP = new SupportedLanguage(
             CommentBlock.TRIPLE_SLASH,
-            "Run the \"BeFaster.App\" solution from the IDE.",
+            "Configure the \"BeFaster.App\" solution to Run on External Console then run.",
             "msbuild befaster.sln; src\\BeFaster.App\\bin\\Debug\\BeFaster.App.exe",
-            "Run the \"BeFaster.App.Tests\" solution.",
+            "Run the \"BeFaster.App.Tests - Unit Tests\" configuration.",
             ".\\src\\BeFaster.App\\Solutions");
     static final SupportedLanguage FSHARP = CSHARP;
     static final SupportedLanguage VBNET = new SupportedLanguage(
             CommentBlock.APOSTROPHE,
-            "Run the \"BeFaster.App\" solution from the IDE.",
+            "Configure the \"BeFaster.App\" solution to Run on External Console then run.",
             "msbuild befaster.sln; src\\BeFaster.App\\bin\\Debug\\BeFaster.App.exe",
-            "Run the \"BeFaster.App.Tests\" solution.",
+            "Run the \"BeFaster.App.Tests - Unit Tests\" configuration.",
             ".\\src\\BeFaster.App\\Solutions");
 
     private CommentBlock commentBlock;

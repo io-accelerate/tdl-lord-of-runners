@@ -15,7 +15,7 @@ import java.util.Map;
 public class GenerateComment {
 
     public static void main(String[] args) throws IOException, TemplateException {
-        generateWorkflowCommentFor(SupportedLanguage.SCALA);
+        generateWorkflowCommentFor(SupportedLanguage.VBNET);
     }
 
     private static void generateWorkflowCommentFor(SupportedLanguage supportedLanguage) throws IOException, TemplateException {
