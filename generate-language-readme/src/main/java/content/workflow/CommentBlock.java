@@ -13,8 +13,14 @@ public class CommentBlock {
             "\"\"\"",
             " ",
             "\"\"\"");
-
-
+    static final CommentBlock TRIPLE_SLASH = new CommentBlock(
+            "/// <summary>",
+            "///",
+            "/// </summary>");
+    static final CommentBlock APOSTROPHE = new CommentBlock(
+            "'",
+            "'",
+            "'");
 
     private String start;
     private String l;

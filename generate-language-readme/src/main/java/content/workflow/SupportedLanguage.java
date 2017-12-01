@@ -5,57 +5,71 @@ import java.util.Map;
 class SupportedLanguage {
     static final SupportedLanguage JAVA = new SupportedLanguage(
             CommentBlock.JAVADOC,
-            ActionNames.CAMEL_CASE,
-            "./gradlew run -Daction=$ACTION",
+            "Run this file from the IDE.",
+            "./gradlew run",
             "./gradlew test -i",
             "./src/main/java/befaster/solutions");
     static final SupportedLanguage SCALA = new SupportedLanguage(
             CommentBlock.JAVADOC,
-            ActionNames.CAMEL_CASE,
-            "sbt \"run $ACTION\"",
-            "sbt \"test\"",
+            "Run this file from the IDE.",
+            "sbt run",
+            "sbt test",
             "./src/main/scala/befaster/solutions");
     static final SupportedLanguage RUBY = new SupportedLanguage(
             CommentBlock.HASHES,
-            ActionNames.UNDERSCORE,
-            "rake run action=$ACTION",
+            "Run this file from the IDE. Set the working directory to the root of the repo.",
+            "rake run",
             "rake test",
             "./lib/solutions");
     static final SupportedLanguage PYTHON = new SupportedLanguage(
             CommentBlock.DOCSTRING,
-            ActionNames.UNDERSCORE,
-            "PYTHONPATH=lib python lib/befaster_app.py $ACTION",
+            "Run this file from the IDE.",
+            "PYTHONPATH=lib python lib/send_command_to_server.py",
             "PYTHONPATH=lib python -m unittest discover -s test",
             "./lib/solutions");
     static final SupportedLanguage NODEJS = new SupportedLanguage(
             CommentBlock.JAVADOC,
-            ActionNames.CAMEL_CASE,
-            "npm start $ACTION",
+            "Run this file from the IDE.",
+            "npm start",
             "npm test",
             "./lib/solutions");
+    static final SupportedLanguage CSHARP = new SupportedLanguage(
+            CommentBlock.TRIPLE_SLASH,
+            "Run the \"BeFaster.App\" solution from the IDE.",
+            "msbuild befaster.sln; src\\BeFaster.App\\bin\\Debug\\BeFaster.App.exe",
+            "Run the \"BeFaster.App.Tests\" solution.",
+            ".\\src\\BeFaster.App\\Solutions");
+    static final SupportedLanguage FSHARP = CSHARP;
+    static final SupportedLanguage VBNET = new SupportedLanguage(
+            CommentBlock.APOSTROPHE,
+            "Run the \"BeFaster.App\" solution from the IDE.",
+            "msbuild befaster.sln; src\\BeFaster.App\\bin\\Debug\\BeFaster.App.exe",
+            "Run the \"BeFaster.App.Tests\" solution.",
+            ".\\src\\BeFaster.App\\Solutions");
 
     private CommentBlock commentBlock;
-    private String runCommand;
-    private String unitTestCommand;
+    private String ideRunInstruction;
+    private String consoleRunInstruction;
+    private String unitTestInstruction;
     private String solutionsLocation;
-    private ActionNames actionNames;
 
     private SupportedLanguage(CommentBlock commentBlock,
-                              ActionNames actionNames, String runCommand,
-                              String unitTestCommand, String solutionsLocation) {
+                              String ideRunInstruction, String consoleRunInstruction,
+                              String unitTestInstruction,
+                              String solutionsLocation) {
         this.commentBlock = commentBlock;
-        this.runCommand = runCommand;
-        this.unitTestCommand = unitTestCommand;
+        this.ideRunInstruction = ideRunInstruction;
+        this.consoleRunInstruction = consoleRunInstruction;
+        this.unitTestInstruction = unitTestInstruction;
         this.solutionsLocation = solutionsLocation;
-        this.actionNames = actionNames;
     }
 
     Map<String, Object> populateModel(Map<String, Object> root) {
         root.put("block", commentBlock);
-        root.put("runCommand", runCommand);
-        root.put("unitTestCommand", unitTestCommand);
+        root.put("ideRunInstruction", ideRunInstruction);
+        root.put("consoleRunInstruction", consoleRunInstruction);
+        root.put("unitTestInstruction", unitTestInstruction);
         root.put("solutionsLocation", solutionsLocation);
-        root.put("act", actionNames);
         return root;
     }
 }
