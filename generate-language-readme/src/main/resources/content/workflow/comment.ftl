@@ -38,4 +38,10 @@ ${block.l}   |  6.  | ${("Observe output, check for failed requests."     )?righ
 ${block.l}   |  7.  | ${("If passed, go to step 3."                       )?right_pad(colW)}|
 ${block.l}   +------+-${("-----------------------------------------------")?right_pad(colW, "-")}+
 ${block.l}
+${block.l}   You are encouraged to change this project as you please:
+${block.l}        * You can use your preferred libraries.
+${block.l}        * You can use your own test framework.
+${block.l}        * You can change the file structure.
+${block.l}        * Anything really, provided that this file stays runnable.
+${block.l}
 ${block.end}
