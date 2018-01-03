@@ -6,7 +6,7 @@
 @rem ##########################################################################
 
 echo.
-echo "Displaying operating system specific systeminfo..."
+echo Displaying operating system specific systeminfo...
 systeminfo | findstr /C:"OS"
 
 @rem Set local scope for the variables with windows NT shell
@@ -105,7 +105,6 @@ if "%JAVA_VERSION%" LSS "9" (
 ) else (
    echo "--- Java 9 or higher detected (Java version %JAVA_VERSION%) ---"
    set "DEFAULT_JVM_OPTS=--illegal-access=warn --add-modules=java.xml.bind,java.activation %DEFAULT_JVM_OPTS%"
-   echo DEFAULT_JVM_OPTS=%DEFAULT_JVM_OPTS%
    echo "Adding JVM args to the DEFAULT_JVM_OPTS variable, new value set to '%DEFAULT_JVM_OPTS%'"
    echo --------------------------------------------------------------------------------------------------------------
 )
