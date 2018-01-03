@@ -87,7 +87,14 @@ set PARAM_SOURCECODE_DIR=--sourcecode %APP_HOME%
 for /f "tokens=3" %%g in ('%JAVA_EXE% -version 2^>^&1 ^| findstr /i "version"') do (
     set JAVA_FULL_VERSION=%%g
 )
-set JAVA_FULL_VERSION=%JAVA_FULL_VERSION:"=%
+
+if defined JAVA_FULL_VERSION (
+  set JAVA_FULL_VERSION=%JAVA_FULL_VERSION:"=%
+) else (
+  echo.
+  echo Due to some reason, we could not determine the Java version via the '%JAVA_EXE% -version' command
+  set JAVA_FULL_VERSION="undefined"
+)
 
 echo.
 echo JAVA_FULL_VERSION=%JAVA_FULL_VERSION%
