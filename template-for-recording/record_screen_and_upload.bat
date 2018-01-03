@@ -54,6 +54,16 @@ goto fail
 
 :findJavaFromJavaHome
 set JAVA_HOME=%JAVA_HOME:"=%
+@rem A bit about the usage of for and value substitution here 
+@rem See docs for https://en.wikibooks.org/wiki/Windows_Batch_Scripting#FOR
+@rem       %%~s1       -   Modify of f, n and x to use short name
+@rem                              or
+@rem       %%~sI       -  expanded path contains short names only
+@rem                     (see description at https://stackoverflow.com/questions/1333589/how-do-i-transform-the-working-directory-into-a-8-3-short-file-name-using-batch?answertab=active#tab-top)
+@rem
+@rem %%..1 or %%..I in the above example, refers to the input parameter (whole string) to 'for'
+@rem Note: in a batch script we need to use %% instead of just % as per the docs.
+
 for %%f in ("%JAVA_HOME%") do set JAVA_HOME=%%~sf
 set JAVA_EXE=%JAVA_HOME%\bin\java.exe
 
