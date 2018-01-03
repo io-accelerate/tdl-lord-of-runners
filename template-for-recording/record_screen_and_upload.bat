@@ -36,8 +36,8 @@ echo location of your Java installation.
 goto fail
 
 :findJavaFromJavaHome
-set "JAVA_HOME=%JAVA_HOME:"=%
-set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+set JAVA_HOME=%JAVA_HOME:"=%
+set JAVA_EXE=%JAVA_HOME%\bin\java.exe
 
 echo.
 echo JAVA_HOME=%JAVA_HOME%
@@ -87,13 +87,13 @@ set PARAM_SOURCECODE_DIR=--sourcecode %APP_HOME%
 for /f "tokens=3" %%g in ('%JAVA_EXE% -version 2^>^&1 ^| findstr /i "version"') do (
     set JAVA_FULL_VERSION=%%g
 )
-set "JAVA_FULL_VERSION=%JAVA_FULL_VERSION:"=%
+set JAVA_FULL_VERSION=%JAVA_FULL_VERSION:"=%
 
 echo.
 echo JAVA_FULL_VERSION=%JAVA_FULL_VERSION%
 
 for /f "delims=. tokens=1-3" %%v in ("%JAVA_FULL_VERSION%") do (
-    if "%%v" LSS "9" (
+    if "%%v" == "1" (
     	set JAVA_VERSION=%%w
     ) else (
     	set JAVA_VERSION=%%v
@@ -105,12 +105,12 @@ echo JAVA_VERSION=%JAVA_VERSION%
 
 if "%JAVA_VERSION%" LSS "9" (
    echo "--- Pre-Java 9 detected (Java version %JAVA_VERSION%) ---"
-   echo Using DEFAULT_JVM_OPTS variable with value '%DEFAULT_JVM_OPTS%'
+   echo "Using DEFAULT_JVM_OPTS variable with value '%DEFAULT_JVM_OPTS%'"
 ) else (
    echo "--- Java 9 or higher detected (Java version %JAVA_VERSION%) ---"
-   set "DEFAULT_JVM_OPTS=--illegal-access=warn --add-modules=java.xml.bind,java.activation %DEFAULT_JVM_OPTS%"
+   set DEFAULT_JVM_OPTS=--illegal-access=warn --add-modules=java.xml.bind,java.activation %DEFAULT_JVM_OPTS%
    echo "Adding JVM args to the DEFAULT_JVM_OPTS variable, new value set to '%DEFAULT_JVM_OPTS%'"
-   echo --------------------------------------------------------------------------------------------------------------
+   echo "--------------------------------------------------------------------------------------------------------------"
 )
 
 @echo on
