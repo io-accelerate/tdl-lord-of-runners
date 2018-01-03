@@ -4,6 +4,23 @@
 @rem  Record startup script for Windows
 @rem
 @rem ##########################################################################
+@rem
+@rem  The script needs to be tested under different versions of Windows:
+@rem    - Windows 7
+@rem    - Windows 8
+@rem    - Windows 10
+@rem
+@rem  Each version may have their sub-types i.e. Home, Professional, Enterprise, etc... but targetting one type per main version type should be sufficient.
+@rem
+@rem  Also these use cases should be tested (manual tests):
+@rem
+@rem  - Executing script with JAVA_HOME not set ( set to empty: set JAVA_HOME= )
+@rem  - Executing script with JAVA_HOME set to a valid JDK/JRE path ( set JAVA_HOME=/path/to/JDK or JRE )
+@rem  - Executing script with JDK/JRE pointing to Java 9 JDK/JRE ( JAVA_HOME or PATH points to JDK/JRE 9.0.x )
+@rem  - Executing script with JDK/JRE pointing to pre-Java 9 JDK/JRE ( JAVA_HOME or PATH points to JDK/JRE 1.n.x, where n is 7 or 8, any lower versions are NOT supported )
+@rem  - Finally combination/permutation of the above (a JAVA_HOME type with JDK/JRE type), if necessary
+@rem
+@rem ##########################################################################
 
 echo.
 echo Displaying operating system specific systeminfo...
