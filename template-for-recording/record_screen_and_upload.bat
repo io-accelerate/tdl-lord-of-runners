@@ -54,6 +54,7 @@ goto fail
 
 :findJavaFromJavaHome
 set JAVA_HOME=%JAVA_HOME:"=%
+for %%f in ("%JAVA_HOME%") do set JAVA_HOME=%%~sf
 set JAVA_EXE=%JAVA_HOME%\bin\java.exe
 
 echo.
@@ -101,16 +102,18 @@ set PARAM_CONFIG_FILE=--config %APP_HOME%\config\credentials.config
 set PARAM_STORE_DIR=--store %APP_HOME%\record\localstore
 set PARAM_SOURCECODE_DIR=--sourcecode %APP_HOME%
 
+@echo on
 for /f "tokens=3" %%g in ('%JAVA_EXE% -version 2^>^&1 ^| findstr /i "version"') do (
     set JAVA_FULL_VERSION=%%g
 )
+@echo off
 
 if defined JAVA_FULL_VERSION (
   set JAVA_FULL_VERSION=%JAVA_FULL_VERSION:"=%
 ) else (
   echo.
   echo Due to some reason, we could not determine the Java version via the '%JAVA_EXE% -version' command
-  set JAVA_FULL_VERSION="undefined"
+  set JAVA_FULL_VERSION=""
 )
 
 echo.
