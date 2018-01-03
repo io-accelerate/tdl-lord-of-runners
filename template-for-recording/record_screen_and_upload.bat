@@ -4,6 +4,23 @@
 @rem  Record startup script for Windows
 @rem
 @rem ##########################################################################
+@rem
+@rem  The script needs to be tested under different versions of Windows:
+@rem    - Windows 7
+@rem    - Windows 8
+@rem    - Windows 10
+@rem
+@rem  Each version may have their sub-types i.e. Home, Professional, Enterprise, etc... but targetting one type per main version type should be sufficient.
+@rem
+@rem  Also these use cases should be tested (manual tests):
+@rem
+@rem  - Executing script with JAVA_HOME not set ( set to empty: set JAVA_HOME= )
+@rem  - Executing script with JAVA_HOME set to a valid JDK/JRE path ( set JAVA_HOME=/path/to/JDK or JRE )
+@rem  - Executing script with JDK/JRE pointing to Java 9 JDK/JRE ( JAVA_HOME or PATH points to JDK/JRE 9.0.x )
+@rem  - Executing script with JDK/JRE pointing to pre-Java 9 JDK/JRE ( JAVA_HOME or PATH points to JDK/JRE 1.n.x, where n is 7 or 8, any lower versions are NOT supported )
+@rem  - Finally combination/permutation of the above (a JAVA_HOME type with JDK/JRE type), if necessary
+@rem
+@rem ##########################################################################
 
 echo.
 echo Displaying operating system specific systeminfo...
@@ -37,6 +54,17 @@ goto fail
 
 :findJavaFromJavaHome
 set JAVA_HOME=%JAVA_HOME:"=%
+@rem A bit about the usage of for and value substitution here 
+@rem See docs for https://en.wikibooks.org/wiki/Windows_Batch_Scripting#FOR
+@rem       %%~s1       -   Modify of f, n and x to use short name
+@rem                              or
+@rem       %%~sI       -  expanded path contains short names only
+@rem                     (see description at https://stackoverflow.com/questions/1333589/how-do-i-transform-the-working-directory-into-a-8-3-short-file-name-using-batch?answertab=active#tab-top)
+@rem
+@rem %%..1 or %%..I in the above example, refers to the input parameter (whole string) to 'for'
+@rem Note: in a batch script we need to use %% instead of just % as per the docs.
+
+for %%f in ("%JAVA_HOME%") do set JAVA_HOME=%%~sf
 set JAVA_EXE=%JAVA_HOME%\bin\java.exe
 
 echo.
@@ -84,10 +112,19 @@ set PARAM_CONFIG_FILE=--config %APP_HOME%\config\credentials.config
 set PARAM_STORE_DIR=--store %APP_HOME%\record\localstore
 set PARAM_SOURCECODE_DIR=--sourcecode %APP_HOME%
 
+@echo on
 for /f "tokens=3" %%g in ('%JAVA_EXE% -version 2^>^&1 ^| findstr /i "version"') do (
     set JAVA_FULL_VERSION=%%g
 )
-set JAVA_FULL_VERSION=%JAVA_FULL_VERSION:"=%
+@echo off
+
+if defined JAVA_FULL_VERSION (
+  set JAVA_FULL_VERSION=%JAVA_FULL_VERSION:"=%
+) else (
+  echo.
+  echo Due to some reason, we could not determine the Java version via the '%JAVA_EXE% -version' command
+  set JAVA_FULL_VERSION=""
+)
 
 echo.
 echo JAVA_FULL_VERSION=%JAVA_FULL_VERSION%
