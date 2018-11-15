@@ -168,12 +168,13 @@ PARAM_STORE_DIR="--store ${APP_HOME}/record/localstore"
 PARAM_SOURCECODE_DIR="--sourcecode ${APP_HOME}"
 
 JAVA_VERSION=$($JAVACMD -version 2>&1 | grep '"9\|"10\|"11\|"12')
+JAVA_VERSION=$(echo $JAVA_VERSION | grep -o '"[0-9]*' | tr -d '"')
 if [ -z "${JAVA_VERSION}" ]; then
    echo "---> Pre-Java 9 detected <---"
    echo "Using DEFAULT_JVM_OPTS variable with value '${DEFAULT_JVM_OPTS}'"
 else
-   echo "---> Java 9 or higher detected ($JAVA_VERSION) <---"
-   DEFAULT_JVM_OPTS="--illegal-access=warn  --add-modules=java.xml.bind,java.activation  ${DEFAULT_JVM_OPTS}"
+   echo "---> Java 9 or higher detected (version $JAVA_VERSION) <---"
+   DEFAULT_JVM_OPTS ="--illegal-access=warn  --add-modules=java.xml.bind,java.activation  ${DEFAULT_JVM_OPTS}"
    echo "Adding JVM args to the DEFAULT_JVM_OPTS variable, new value set to '${DEFAULT_JVM_OPTS}'"
    echo "--------------------------------------------------------------------------------------------------------------"
 fi
