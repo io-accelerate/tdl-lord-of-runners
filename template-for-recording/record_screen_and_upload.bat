@@ -137,15 +137,20 @@ for /f "delims=. tokens=1-3" %%v in ("%JAVA_FULL_VERSION%") do (
     )
 )
 
+for /f "tokens=1,2 delims=-" %%a in ("%JAVA_VERSION%") do (
+  set JAVA_VERSION=%%a
+)
+
 echo.
 echo JAVA_VERSION=%JAVA_VERSION%
+
 set JAVA_VERSION_9=9
 
 if %JAVA_VERSION% lss %JAVA_VERSION_9% (
-   echo "--- Pre-Java 9 detected (Java version %JAVA_VERSION%) ---"
+   echo "--- Pre-Java 9 detected ---"
    echo "Using DEFAULT_JVM_OPTS variable with value '%DEFAULT_JVM_OPTS%'"
 ) else (
-   echo "--- Java 9 or higher detected (Java version %JAVA_VERSION%) ---"
+   echo "--- Java 9 or higher detected (version %JAVA_VERSION%) ---"
    set DEFAULT_JVM_OPTS=--illegal-access=warn --add-modules=java.xml.bind,java.activation %DEFAULT_JVM_OPTS%
    echo "Adding JVM args to the DEFAULT_JVM_OPTS variable, new value set to '%DEFAULT_JVM_OPTS%'"
    echo "--------------------------------------------------------------------------------------------------------------"
