@@ -129,11 +129,11 @@ if defined JAVA_FULL_VERSION (
 echo.
 echo JAVA_FULL_VERSION=%JAVA_FULL_VERSION%
 
-@rem Look for tokens "9, "10, "11 or "12 in the Java version string, 
+@rem Look for tokens "9, "10, "11 or "12 in the Java version string,
 @rem if found, return the whole Java String, otherwise return empty string
 @rem
 @rem For e.g.
-@rem   --version command output    JAVA_VERSION   
+@rem   --version command output    JAVA_VERSION
 @rem   ========================   ==============
 @rem   java version "1.8.0_172"     <no output>
 @rem   java version "9.0.1"            "9
@@ -153,7 +153,7 @@ for /f "delims=. tokens=1-3" %%v in ("%JAVA_FULL_VERSION%") do (
 @rem only the digits before it are returned
 @rem
 @rem For e.g.
-@rem   JAVA_VERSION   JAVA_VERSION_INT_VALUE   
+@rem   JAVA_VERSION   JAVA_VERSION_INT_VALUE
 @rem   ============   ======================
 @rem    <no output>         <no output>
 @rem         9                  9
@@ -161,9 +161,9 @@ for /f "delims=. tokens=1-3" %%v in ("%JAVA_FULL_VERSION%") do (
 @rem        11                  11
 @rem       12-ea                12
 @rem
-@rem The for loop below iterates through tokens, 
+@rem The for loop below iterates through tokens,
 @rem tokens are separated by the delimeter provided to 'delim'
-@rem Only the first token is retained, and as per the above table, 
+@rem Only the first token is retained, and as per the above table,
 @rem it will always be empty or a numeric value between 9 and 12 (included)
 for /f "tokens=1,2 delims=-" %%a in ("%JAVA_VERSION%") do (
   set JAVA_VERSION_INT_VALUE=%%a
@@ -173,16 +173,22 @@ echo.
 echo JAVA_VERSION=%JAVA_VERSION_INT_VALUE%
 
 set JAVA_VERSION_9=9
+set JAVA_VERSION_11=11
 
 if %JAVA_VERSION_INT_VALUE% lss %JAVA_VERSION_9% (
    echo "--- Pre-Java 9 detected ---"
    echo "Using DEFAULT_JVM_OPTS variable with value '%DEFAULT_JVM_OPTS%'"
 ) else (
    echo "--- Java 9 or higher detected (version %JAVA_VERSION_INT_VALUE%) ---"
-   set DEFAULT_JVM_OPTS=--illegal-access=warn --add-modules=java.xml.bind,java.activation %DEFAULT_JVM_OPTS%
-   echo "Adding JVM args to the DEFAULT_JVM_OPTS variable, new value set to '%DEFAULT_JVM_OPTS%'"
-   echo "--------------------------------------------------------------------------------------------------------------"
+   if %JAVA_VERSION_INT_VALUE% lss %JAVA_VERSION_11% (
+       set DEFAULT_JVM_OPTS=--illegal-access=warn --add-modules=java.xml.bind,java.activation %DEFAULT_JVM_OPTS%
+       echo "Adding JVM args to the DEFAULT_JVM_OPTS variable, new value set to '%DEFAULT_JVM_OPTS%'"
+   ) else (
+      echo "Using DEFAULT_JVM_OPTS variable with value '%DEFAULT_JVM_OPTS%'"
+      echo "Not using kill-switch or modules flags starting from this version of Java"
+   )
 )
+echo "--------------------------------------------------------------------------------------------------------------"
 
 @echo on
 @rem Execute Record
