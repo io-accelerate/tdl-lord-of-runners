@@ -200,17 +200,10 @@ JAVA_VERSION=$($JAVACMD -version 2>&1 | grep '"9\|"10\|"11\|"12')
 JAVA_VERSION_INT_VALUE=$(echo $JAVA_VERSION | grep -o '"[0-9]*' | tr -d '"')
 if [ -z "${JAVA_VERSION_INT_VALUE}" ]; then
    echo "---> Pre-Java 9 detected <---"
-   echo "Using DEFAULT_JVM_OPTS variable with value '${DEFAULT_JVM_OPTS}'"
 else
    echo "---> Java 9 or higher detected (version $JAVA_VERSION_INT_VALUE) <---"
-   if [ ${JAVA_VERSION_INT_VALUE} -lt 11 ]; then
-       DEFAULT_JVM_OPTS="--illegal-access=warn  --add-modules=java.xml.bind,java.activation  ${DEFAULT_JVM_OPTS}"
-       echo "Adding JVM args to the DEFAULT_JVM_OPTS variable, new value set to '${DEFAULT_JVM_OPTS}'"
-   else
-       echo "Using DEFAULT_JVM_OPTS variable with value '${DEFAULT_JVM_OPTS}'"
-       echo "Not using kill-switch or modules flags starting from this version of Java"
-   fi
 fi
+echo "Using DEFAULT_JVM_OPTS variable with value '${DEFAULT_JVM_OPTS}'"
 echo "--------------------------------------------------------------------------------------------------------------"
 
 eval splitJvmOpts ${DEFAULT_JVM_OPTS} ${JAVA_OPTS} ${RECORD_OPTS}
