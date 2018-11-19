@@ -178,7 +178,11 @@ PARAM_SOURCECODE_DIR="--sourcecode ${APP_HOME}"
 #   java version "10.0.1"           "10
 #   java version "11.0.2"           "11
 #   java version "12-ea"            "12-ea
-JAVA_VERSION=$($JAVACMD -version 2>&1 | grep '"9\|"10\|"11\|"12')
+JAVA_VERSION_STRING=$($JAVACMD -version 2>&1)
+echo ${JAVA_VERSION_STRING}
+JAVA_FULL_VERSION=$(echo ${JAVA_VERSION_STRING} | grep -o '\".*\"')
+echo JAVA_FULL_VERSION=${JAVA_FULL_VERSION}
+JAVA_VERSION=$(echo ${JAVA_FULL_VERSION}| grep '"9\|"10\|"11\|"12')
 
 # Only include digits from value in JAVA_VERSION,
 # If the above value contains non-numeric values,
@@ -195,7 +199,7 @@ JAVA_VERSION=$($JAVACMD -version 2>&1 | grep '"9\|"10\|"11\|"12')
 #
 # The for loop below iterates through tokens,
 # tokens are separated by the delimeter provided to 'delim'
-# Only the first token is retained, and as per the above table,
+# Only the first token is retained, and as pattern the above table,
 # it will always be empty or a numeric value between 9 and 12 (included)
 JAVA_VERSION_INT_VALUE=$(echo $JAVA_VERSION | grep -o '"[0-9]*' | tr -d '"')
 echo "JAVA_VERSION=${JAVA_VERSION_INT_VALUE:-8}"
