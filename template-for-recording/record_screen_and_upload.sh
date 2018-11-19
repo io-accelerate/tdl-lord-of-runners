@@ -198,11 +198,7 @@ JAVA_VERSION=$($JAVACMD -version 2>&1 | grep '"9\|"10\|"11\|"12')
 # Only the first token is retained, and as per the above table,
 # it will always be empty or a numeric value between 9 and 12 (included)
 JAVA_VERSION_INT_VALUE=$(echo $JAVA_VERSION | grep -o '"[0-9]*' | tr -d '"')
-if [ -z "${JAVA_VERSION_INT_VALUE}" ]; then
-   echo "---> Pre-Java 9 detected <---"
-else
-   echo "---> Java 9 or higher detected (version $JAVA_VERSION_INT_VALUE) <---"
-fi
+echo "JAVA_VERSION=${JAVA_VERSION_INT_VALUE:-8}"
 echo "Using DEFAULT_JVM_OPTS variable with value '${DEFAULT_JVM_OPTS}'"
 echo "--------------------------------------------------------------------------------------------------------------"
 
