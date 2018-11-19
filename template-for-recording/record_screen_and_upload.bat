@@ -112,6 +112,7 @@ set PARAM_CONFIG_FILE=--config %APP_HOME%\config\credentials.config
 set PARAM_STORE_DIR=--store %APP_HOME%\record\localstore
 set PARAM_SOURCECODE_DIR=--sourcecode %APP_HOME%
 
+%JAVA_EXE% -version
 @echo on
 for /f "tokens=3" %%g in ('%JAVA_EXE% -version 2^>^&1 ^| findstr /i "version"') do (
     set JAVA_FULL_VERSION=%%g
