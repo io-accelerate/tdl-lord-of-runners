@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'io.accelerate'
+version = '1.0'
+
+description = """wget - a CLI program to allow downloading files from a remote server"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+buildscript {
+     repositories {
+          maven {
+               url "https://plugins.gradle.org/m2/"
+          }
+          jcenter()
+     }
+     dependencies {
+          classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+     }
+}
+
+repositories {
+     jcenter()
+     mavenLocal()
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+def mainClassName = "io.accelerate.Wget"
+jar {
+     manifest {
+          attributes "Main-Class": "$mainClassName"
+     }
+}

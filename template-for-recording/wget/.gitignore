@@ -1,0 +1,17 @@
+.idea
+.DS_Store
+classes
+.gradle
+build
+.private
+out
+*.jar
+*.zip
+scripts/packr-scripts/*.jar
+!scripts/packr-scripts/packr.jar
+scripts/packr-scripts/linux/record-and-upload/*
+scripts/packr-scripts/linux/*.zip
+scripts/packr-scripts/macos/record-and-upload/*
+scripts/packr-scripts/macos/*.zip
+scripts/packr-scripts/windows/record-and-upload/*
+scripts/packr-scripts/windows/*.zip
