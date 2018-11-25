@@ -8,6 +8,8 @@ echo "Building the uberjar for wget"
 ./gradlew clean shadowJar -i
 
 echo "Building the native-image for wget"
+OSName=$(uname)
+OSName=${OSName,,}
 programName="wget"
 ## native-image is a part of GraalVM, the JDK for GraalVM can be downloaded from 
 ## Release on GitHub: https://github.com/oracle/graal/releases
@@ -20,7 +22,7 @@ native-image -H:-ReportUnsupportedElementsAtRuntime \
              -jar build/libs/${programName}-*-all.jar
 
 echo "Renamed ${programName}-*-all to ${programName}"
-mv ${programName}-*-all ${programName}
+mv ${programName}-*-all ${programName}-${OSName}
 
 echo "Moved ${programName} to ../tools"
-mv ${programName} ../tools
+mv ${programName}-${OSName} ../tools
