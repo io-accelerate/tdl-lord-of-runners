@@ -221,8 +221,9 @@ startRecorderViaCapsule() {
 
 #startRecorderViaCapsule $@
 
+RELEASE_VERSION=v0.0.16
 RECORD_AND_UPLOAD_TGZ=$(ls record-and-upload-*-${OSName}.tgz)
-WGET_DOWNLOAD_URL="https://github.com/julianghionoiu/record-and-upload/releases/download/v0.0.16/${RECORD_AND_UPLOAD_TGZ}"
+WGET_DOWNLOAD_URL="https://github.com/julianghionoiu/record-and-upload/releases/download/${RELEASE_VERSION}/${RECORD_AND_UPLOAD_TGZ}"
 downloadURLMessage() {
     echo "--------------------------------------------------------------------------------------"
     echo "Please download ${WGET_DOWNLOAD_URL} and place it in the folder where $0 can be found."
@@ -250,7 +251,7 @@ startRecorderViaPackr() {
         if [[ ! -e record ]]; then
             tar xvzf ${RECORD_AND_UPLOAD_TGZ} || ($(downloadURLMessage) && true)
         else
-            echo "record folder already exists, proceding"
+            echo "record folder already exists, proceeding"
         fi
     else
         echo "Failed to find a valid ${RECORD_AND_UPLOAD_TGZ}, either the downloading or unpacking of the zip file failed."
