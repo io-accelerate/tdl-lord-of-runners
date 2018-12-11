@@ -221,7 +221,6 @@ startRecorderViaCapsule() {
 
 #startRecorderViaCapsule $@
 
-RELEASE_VERSION=v0.0.16
 RECORD_AND_UPLOAD_TGZ=$(ls record-and-upload-*-${OSName}.tgz)
 WGET_DOWNLOAD_URL="https://github.com/julianghionoiu/record-and-upload/releases/download/${RELEASE_VERSION}/${RECORD_AND_UPLOAD_TGZ}"
 downloadURLMessage() {
@@ -245,7 +244,7 @@ startRecorderViaPackr() {
         cd tools && ./wget-${OSName} ${WGET_DOWNLOAD_URL} ../${RECORD_AND_UPLOAD_TGZ} && cd .. || (cd .. && $(downloadURLMessage) && true)
 
         ## if the above is failing, replace the download url above with the location to download record-and-upload.zip
-    fi    
+    fi
 
     if [[ -s ${RECORD_AND_UPLOAD_TGZ} ]]; then
         if [[ ! -e record ]]; then
@@ -262,11 +261,13 @@ startRecorderViaPackr() {
         if [[ "${OSName}" = "linux" ]]; then
             ./record/record-and-upload ${PARAM_CONFIG_FILE} ${PARAM_STORE_DIR} ${PARAM_SOURCECODE_DIR} $@
         elif [[ "${OSName}" = "macos" ]]; then
-            ./record/Contents/MacOS/record-and-upload ${PARAM_CONFIG_FILE} ${PARAM_STORE_DIR} ${PARAM_SOURCECODE_DIR} $@
+            ./record/Contents/Resources/record-and-upload ${PARAM_CONFIG_FILE} ${PARAM_STORE_DIR} ${PARAM_SOURCECODE_DIR} $@
+            # Alternative method to run the app in case the above does not work:
+            # cd record/Contents/Resources && ./jre/bin/java -jar record-and-upload-v0.0.16.jar ${PARAM_CONFIG_FILE} ${PARAM_STORE_DIR} ${PARAM_SOURCECODE_DIR} $@ && cd -
         fi
     else
         echo "Failed to find the 'record' folder, unpacking of the zip file might have failed."
-        exit -1        
+        exit -1
     fi
 
     # JAVACMD=${APP_HOME}/record/jre/bin/java
