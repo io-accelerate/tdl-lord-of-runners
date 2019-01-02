@@ -28,7 +28,7 @@ REMOTE_RUNNER_ZIP="https://github.com/julianghionoiu/tdl-runner-${TARGET_LANGUAG
 echo "Download the language runner from ${REMOTE_RUNNER_ZIP}"
 ${SCRIPT_CURRENT_DIR}/download.sh "${REMOTE_RUNNER_ZIP}" "${WORK_DIR}/runner.zip"
 unzip "${WORK_DIR}/runner.zip" -d "${WORK_DIR}/."
-mv "${WORK_DIR}/tdl-runner-java-0.24.0.2" "${RUNNER_DIR}"
+mv "${WORK_DIR}/tdl-runner-${TARGET_LANGUAGE}-${RUNNER_VERSION}" "${RUNNER_DIR}"
 
 # 2. Get JRE
 JRE_VERSION=$(cat "${SCRIPT_CURRENT_DIR}/version.jre.txt")
@@ -49,12 +49,14 @@ cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_screen_and_upload.sh"
 # 5. Bundle
 BUNDLE_ZIP_NAME="runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
 BUNDLE_ZIP_FILE="${BUILD_DIR}/${BUNDLE_ZIP_NAME}"
-(cd ${WORK_DIR} && zip "${BUNDLE_ZIP_FILE}" -r "./accelerate_runner")
-
-# Write manifest with all versions
 BUNDLE_ZIP_MANIFEST="${BUILD_DIR}/${BUNDLE_ZIP_NAME}.meta"
+(cd ${WORK_DIR} && zip "${BUNDLE_ZIP_FILE}" -r "./accelerate_runner")
 cat > "${BUNDLE_ZIP_MANIFEST}" <<End-of-message
 RUNNER_VERSION=${RUNNER_VERSION}
 JRE_VERSION=${JRE_VERSION}
 RECORDER_VERSION=${RECORDER_VERSION}
 End-of-message
+
+# Wrap it up
+cat "${BUNDLE_ZIP_MANIFEST}"
+echo "Created ${BUNDLE_ZIP_FILE}"
