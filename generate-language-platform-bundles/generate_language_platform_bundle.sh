@@ -43,8 +43,13 @@ mkdir -p  "${RUNNER_DIR}/record/bin"
 ${SCRIPT_CURRENT_DIR}/download.sh "${REMOTE_RECORDER_JAR}" "${RUNNER_DIR}/record/bin/record-and-upload.jar"
 
 # 4. Place Recording script
-LOCAL_RECORDER_SCRIPT="${SCRIPT_CURRENT_DIR}/record/record_screen_and_upload.sh"
-cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_screen_and_upload.sh"
+FILE_EXT="sh"
+if [[ "${TARGET_LANGUAGE}"="windows" ]]; then
+   FILE_EXT="bat"
+fi		
+LOCAL_RECORDER_SCRIPT="${SCRIPT_CURRENT_DIR}/record/record_screen_and_upload.${FILE_EXT}"
+cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_screen_and_upload.${FILE_EXT}"
+
 
 # 5. Bundle
 BUNDLE_ZIP_NAME="runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
