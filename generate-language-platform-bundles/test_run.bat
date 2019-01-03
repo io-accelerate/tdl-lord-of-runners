@@ -31,6 +31,6 @@ unzip "%BUNDLE_ZIP%" -d "%RUN_TEMP_DIR%"
 
 :fail
 echo "Syntax is: $0 language platform"
-rem exit 1
+exit 1
 
 :finish
