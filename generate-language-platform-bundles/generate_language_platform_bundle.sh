@@ -43,11 +43,15 @@ mkdir -p  "${RUNNER_DIR}/record/bin"
 ${SCRIPT_CURRENT_DIR}/download.sh "${REMOTE_RECORDER_JAR}" "${RUNNER_DIR}/record/bin/record-and-upload.jar"
 
 # 4. Place Recording script
-FILE_EXT="sh"
-if [[ "${TARGET_LANGUAGE}"="windows" ]]; then
+rm -f "${RUNNER_DIR}/record_screen_and_upload.sh"
+rm -f "${RUNNER_DIR}/record_screen_and_upload.bat"
+if [ "${TARGET_LANGUAGE}" = "windows" ]; then
    FILE_EXT="bat"
+else
+   FILE_EXT="sh"
 fi		
 LOCAL_RECORDER_SCRIPT="${SCRIPT_CURRENT_DIR}/record/record_screen_and_upload.${FILE_EXT}"
+echo "cp ${LOCAL_RECORDER_SCRIPT} ${RUNNER_DIR}/record_screen_and_upload.${FILE_EXT}"
 cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_screen_and_upload.${FILE_EXT}"
 
 
@@ -55,6 +59,7 @@ cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_screen_and_upload.${FILE_EXT
 BUNDLE_ZIP_NAME="runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
 BUNDLE_ZIP_FILE="${BUILD_DIR}/${BUNDLE_ZIP_NAME}"
 BUNDLE_ZIP_MANIFEST="${BUILD_DIR}/${BUNDLE_ZIP_NAME}.meta"
+rm -f "${BUNDLE_ZIP_FILE}"
 (cd ${WORK_DIR} && zip "${BUNDLE_ZIP_FILE}" -r "./accelerate_runner")
 cat > "${BUNDLE_ZIP_MANIFEST}" <<End-of-message
 RUNNER_VERSION=${RUNNER_VERSION}
