@@ -10,7 +10,8 @@ SOURCE_URL="$1"
 DESTINATION_FILE="$2"
 
 FILE_NAME=$(echo ${SOURCE_URL}| rev | cut -d "/" -f1 | rev)
-CACHED_FILE="${CACHE_DIR}/${FILE_NAME}"
+URL_HASH=$(echo ${SOURCE_URL} | shasum | tr -d " -")
+CACHED_FILE="${CACHE_DIR}/${FILE_NAME}---${URL_HASH}"
 
 if [ -f "${CACHED_FILE}" ]; then
     echo "File already exists in local cache: ${CACHED_FILE}"

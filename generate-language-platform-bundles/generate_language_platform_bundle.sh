@@ -45,10 +45,9 @@ ${SCRIPT_CURRENT_DIR}/download.sh "${REMOTE_RECORDER_JAR}" "${RUNNER_DIR}/record
 # 4. Place Recording script
 rm -f "${RUNNER_DIR}/record_screen_and_upload.sh"
 rm -f "${RUNNER_DIR}/record_screen_and_upload.bat"
-if [ "${TARGET_LANGUAGE}" = "windows" ]; then
+FILE_EXT="sh"
+if [ "${TARGET_PLATFORM}" == "windows" ]; then
    FILE_EXT="bat"
-else
-   FILE_EXT="sh"
 fi		
 LOCAL_RECORDER_SCRIPT="${SCRIPT_CURRENT_DIR}/record/record_screen_and_upload.${FILE_EXT}"
 echo "cp ${LOCAL_RECORDER_SCRIPT} ${RUNNER_DIR}/record_screen_and_upload.${FILE_EXT}"
