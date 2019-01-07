@@ -113,5 +113,12 @@ displayPassFailSummary(){
     echo "  ${#failedTests[@]} test(s) failed" 1>&2
 }
 
+cleanup() {
+  echo "Cleaning up run_tmp and work folders" 1>&2	
+  rm -fr run_tmp || true
+  rm -fr work || true
+}
+
 time runTests
 displayPassFailSummary
+cleanup
