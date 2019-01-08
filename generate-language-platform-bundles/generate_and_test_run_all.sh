@@ -142,18 +142,26 @@ runTestOnBundle() {
 
     echo "" 1>&2
     echo " ~~~ Now testing the generated runner package: video capturing enabled ~~~" 1>&2
-    echo " ~~~ [Run the script to write to some source file in the package bundle] ~~~" 1>&2
-    echo " ~~~ [Press ctrl-break or ctrl-c to break execution] ~~~" 1>&2
+    echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
+    echo " ~~~     [Run the challenge in the language bundle] ~~~" 1>&2
+    echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
+    echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
+    echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
     cd ${SCRIPT_CURRENT_DIR} && time testRun || true
-    echo " ~~~ [Check if the video and source code files have been correctly created] ~~~" 1>&2
+    echo " ~~~     [Check if the video and source code files have been uploaded (look for log messages above)] ~~~" 1>&2
+    echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
     read -t 10 -p "Hit ENTER or wait ten seconds"
 
     echo "" 1>&2
     echo " ~~~ Now testing the generated runner package: --no-video enabled ~~~" 1>&2
-    echo " ~~~ [Run the script to write to some source file in the package bundle] ~~~" 1>&2
-    echo " ~~~ [Press ctrl-break or ctrl-c to break execution] ~~~" 1>&2
+    echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
+    echo " ~~~     [Run the challenge in the language bundle] ~~~" 1>&2
+    echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
+    echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
+    echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
     cd ${SCRIPT_CURRENT_DIR} && time testRun --no-video || true
-    echo " ~~~ [Check if the source code files have been correctly created] ~~~" 1>&2
+    echo " ~~~     [Check if the source code files have been uploaded (look for log messages above)] ~~~" 1>&2
+    echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
     read -t 10 -p "Hit ENTER or wait ten seconds"
 }
 
