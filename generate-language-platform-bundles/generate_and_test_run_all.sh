@@ -45,6 +45,7 @@ SCRIPT_CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 passedTests=()
 failedTests=()
+actualResult=""
 
 runTests() {
 	mkdir -p "${SCRIPT_CURRENT_DIR}/logs"
@@ -53,17 +54,8 @@ runTests() {
 		echo "" 1>&2
 		echo "Generating and testing the runner package for the '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM}'" 1>&2
 
-		echo " ~~~ Generating the runner package ~~~" 1>&2
-		GENERATE_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-generate.logs"
-		rm "${GENERATE_LOGS}" &>/dev/null || true
-		(cd ${SCRIPT_CURRENT_DIR} && time ./generate_language_platform_bundle.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${GENERATE_LOGS}" || true)
-
-		echo "" 1>&2
-		echo " ~~~ Now testing the generated runner package ~~~" 1>&2
-		TEST_RUN_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-test-run.logs"
-		rm "${TEST_RUN_LOGS}" &>/dev/null || true
-		( cd ${SCRIPT_CURRENT_DIR} && time ./test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true)
-		actualResult=$(grep "Self test completed successfully" "${TEST_RUN_LOGS}" || true)
+		runGenerateBundle
+        runTestOnBundle
 
 		outcome=Passed
 
@@ -118,6 +110,65 @@ cleanup() {
   echo "Cleaning up run_tmp and work folders" 1>&2	
   rm -fr ${SCRIPT_CURRENT_DIR}/run_tmp || true
   rm -fr ${SCRIPT_CURRENT_DIR}/work || true
+}
+
+runGenerateBundle() {
+    echo " ~~~ Generating the runner package ~~~" 1>&2
+    GENERATE_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-generate.logs"
+    rm "${GENERATE_LOGS}" &>/dev/null || true
+    (cd ${SCRIPT_CURRENT_DIR} && time ./generate_language_platform_bundle.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${GENERATE_LOGS}" || true)
+}
+
+checkForCredentialsFile() {
+    echo "CREDENTIALS_CONFIG_FILE=${CREDENTIALS_CONFIG_FILE:-}"
+    if [[ -z "${CREDENTIALS_CONFIG_FILE:-}" ]]; then
+       echo "Credentials config is not defined in CREDENTIALS_CONFIG_FILE, please set it to a valid file."
+       exit -1
+    fi
+
+    echo "Copying ${CREDENTIALS_CONFIG_FILE:-} to ${SCRIPT_CURRENT_DIR}/run_tmp/accelerate_runner/config/credentials.config"
+    cp ${CREDENTIALS_CONFIG_FILE} ${SCRIPT_CURRENT_DIR}/run_tmp/accelerate_runner/config/credentials.config
+}
+
+runTestOnBundle() {
+    echo "" 1>&2
+    echo " ~~~ Now testing the generated runner package: --run-self-test enabled ~~~" 1>&2
+    TEST_RUN_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-self-test.logs"
+    rm "${TEST_RUN_LOGS}" &>/dev/null || true
+    ( cd ${SCRIPT_CURRENT_DIR} && time ./test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true)
+    actualResult=$(grep "Self test completed successfully" "${TEST_RUN_LOGS}" || true)
+
+    checkForCredentialsFile
+
+    echo "" 1>&2
+    echo " ~~~ Now testing the generated runner package: video capturing enabled ~~~" 1>&2
+    echo " ~~~ [Run the script to write to some source file in the package bundle] ~~~" 1>&2
+    echo " ~~~ [Press ctrl-break or ctrl-c to break execution] ~~~" 1>&2
+    cd ${SCRIPT_CURRENT_DIR} && time testRun || true
+    echo " ~~~ [Check if the video and source code files have been correctly created] ~~~" 1>&2
+    read -t 10 -p "Hit ENTER or wait ten seconds"
+
+    echo "" 1>&2
+    echo " ~~~ Now testing the generated runner package: --no-video enabled ~~~" 1>&2
+    echo " ~~~ [Run the script to write to some source file in the package bundle] ~~~" 1>&2
+    echo " ~~~ [Press ctrl-break or ctrl-c to break execution] ~~~" 1>&2
+    cd ${SCRIPT_CURRENT_DIR} && time testRun --no-video || true
+    echo " ~~~ [Check if the source code files have been correctly created] ~~~" 1>&2
+    read -t 10 -p "Hit ENTER or wait ten seconds"
+}
+
+testRun() {
+    FLAGS=$@
+
+    RUN_TEMP_DIR="${SCRIPT_CURRENT_DIR}/run_tmp"
+    "${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.sh" ${FLAGS}
+
+    echo " ~~~~~~ Copying video and source artifacts to test-results folder ~~~~~~"
+    TARGET_TEST_RESULTS_FOLDER=${SCRIPT_CURRENT_DIR}/test-results/${TARGET_PLATFORM}/${TARGET_LANGUAGE}
+    mkdir -p ${TARGET_TEST_RESULTS_FOLDER}
+
+    cp ${RUN_TEMP_DIR}/accelerate_runner/record/localstore/*.* ${TARGET_TEST_RESULTS_FOLDER}
+    ls -lash ${TARGET_TEST_RESULTS_FOLDER}
 }
 
 time runTests
