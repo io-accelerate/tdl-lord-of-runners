@@ -52,9 +52,9 @@ runTests() {
 
 	for TARGET_LANGUAGE in ${TARGET_LANGUAGES}; do
 		echo "" 1>&2
-		echo "Generating and testing the runner package for the '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM}'" 1>&2
+		echo "Generating and testing the runner bundle for the '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM}'" 1>&2
 
-		runGenerateBundle
+		downloadBundleAndExpand
         runTestOnBundle
 
 		outcome=Passed
@@ -165,11 +165,27 @@ runTestOnBundle() {
     read -t 10 -p "Hit ENTER or wait ten seconds"
 }
 
+downloadBundleAndExpand() {
+    TARGET_BUNDLE=runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip
+    TARGET_BUNDLE_FULLPATH=${SCRIPT_CURRENT_DIR}/build/${TARGET_BUNDLE}
+    if [[ ! -e "${TARGET_BUNDLE_FULLPATH}" ]]; then
+        echo "Downloading runner bundle for '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM} into ${SCRIPT_CURRENT_DIR}/build"
+        curl https://get.accelerate.io/${TARGET_BUNDLE} \
+             --output ${TARGET_BUNDLE_FULLPATH}
+    else
+        echo "Runner bundle for '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM} already present in ${SCRIPT_CURRENT_DIR}/build"
+    fi
+}
+
 testRun() {
     FLAGS=$@
 
     RUN_TEMP_DIR="${SCRIPT_CURRENT_DIR}/run_tmp"
-    "${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.sh" ${FLAGS}
+    if [[ "${DETECTED_PLATFORM}" = "windows" ]]; then
+        "${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.bat" ${FLAGS} || true
+    else
+        "${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.sh" ${FLAGS} || true
+    fi
 
     echo " ~~~~~~ Copying video and source artifacts to test-results folder ~~~~~~"
     TARGET_TEST_RESULTS_FOLDER=${SCRIPT_CURRENT_DIR}/test-results/${TARGET_PLATFORM}/${TARGET_LANGUAGE}

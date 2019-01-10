@@ -20,4 +20,27 @@ BUNDLE_ZIP="${SCRIPT_CURRENT_DIR}/build/runner-for-${TARGET_LANGUAGE}-${TARGET_P
 unzip "${BUNDLE_ZIP}" -d "${RUN_TEMP_DIR}"
 
 # Invoke JRE
-"${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.sh" --run-self-test
+detectPlatform() {
+	case "$(uname)" in
+	  CYGWIN* )
+	    echo "windows"
+	    return
+	    ;;
+	  Darwin* )
+	    echo "macos"
+	    return
+	    ;;
+	  MINGW* )
+	    echo "windows"
+	    return
+	    ;;
+	esac
+	echo "linux"
+}
+
+FILE_EXT=sh
+if [[ "$(detectPlatform)" = "windows" ]]; then
+	FILE_EXT=bat
+fi
+
+"${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.${FILE_EXT}" --run-self-test
