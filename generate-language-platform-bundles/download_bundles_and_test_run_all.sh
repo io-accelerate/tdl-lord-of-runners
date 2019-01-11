@@ -59,7 +59,7 @@ runTests() {
 		echo "" 1>&2
 		echo "Generating and testing the runner bundle for the '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM}'" 1>&2
 
-		downloadBundleAndExpand
+		downloadBundle
         runTestOnBundle
 
 		outcome=Passed
@@ -149,12 +149,12 @@ runTestOnBundle() {
         echo ""
         echo "${testName} has already been performed, moving further..." 
         echo ""
+        actualResult="skipped"
     fi
-
-    checkForCredentialsFile
 
     testName=video-capturing-enabled-test
     if [[ $(checkTest "${testName}") = "not-performed" ]]; then
+        checkForCredentialsFile
         echo "" 1>&2
         echo " ~~~ Now testing the generated runner package: video capturing enabled ~~~" 1>&2
         echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
@@ -175,6 +175,7 @@ runTestOnBundle() {
 
     testName=video-capturing-disabled-test
     if [[ $(checkTest "{testName}") = "not-performed" ]]; then
+        checkForCredentialsFile
         echo "" 1>&2
         echo " ~~~ Now testing the generated runner package: --no-video enabled ~~~" 1>&2
         echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
@@ -211,7 +212,7 @@ checkTest() {
     echo ${result}
 }
 
-downloadBundleAndExpand() {
+downloadBundle() {
     TARGET_BUNDLE="runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
     TARGET_BUNDLE_FULLPATH="${SCRIPT_CURRENT_DIR}/build/${TARGET_BUNDLE}"
     if [[ ! -e "${TARGET_BUNDLE_FULLPATH}" ]]; then
@@ -234,8 +235,8 @@ testRun() {
     fi
 
     echo " ~~~~~~ Copying video and source artifacts to test-results folder ~~~~~~"
-    cp ${RUN_TEMP_DIR}/accelerate_runner/record/localstore/*.* ${TARGET_TEST_RESULTS_FOLDER}
-    ls -lash ${TARGET_TEST_RESULTS_FOLDER}
+    cp "${RUN_TEMP_DIR}"/accelerate_runner/record/localstore/*.* "${TARGET_TEST_RESULTS_FOLDER}"
+    ls -lash "${TARGET_TEST_RESULTS_FOLDER}"
 }
 
 time runTests
