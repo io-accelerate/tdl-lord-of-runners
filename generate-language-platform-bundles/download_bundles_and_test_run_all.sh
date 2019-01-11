@@ -40,6 +40,7 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TARGET_PLATFORM=${TARGET_PLATFORM:-${DETECTED_PLATFORM}}
 TARGET_LANGUAGES=${TARGET_LANGUAGES:-${AVAILABLE_LANGUAGES}}
+TARGET_TEST_RESULTS_FOLDER=""
 
 SCRIPT_CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -51,6 +52,10 @@ runTests() {
 	mkdir -p "${SCRIPT_CURRENT_DIR}/logs"
 
 	for TARGET_LANGUAGE in ${TARGET_LANGUAGES}; do
+        TARGET_TEST_RESULTS_FOLDER="${SCRIPT_CURRENT_DIR}/test-results/${TARGET_PLATFORM}/${TARGET_LANGUAGE}"
+        mkdir -p "${TARGET_TEST_RESULTS_FOLDER}"
+
+        cleanup
 		echo "" 1>&2
 		echo "Generating and testing the runner bundle for the '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM}'" 1>&2
 
@@ -108,8 +113,8 @@ displayPassFailSummary(){
 
 cleanup() {
   echo "Cleaning up run_tmp and work folders" 1>&2	
-  rm -fr ${SCRIPT_CURRENT_DIR}/run_tmp || true
-  rm -fr ${SCRIPT_CURRENT_DIR}/work || true
+  rm -fr "${SCRIPT_CURRENT_DIR}/run_tmp" || true
+  rm -fr "${SCRIPT_CURRENT_DIR}/work" || true
 }
 
 runGenerateBundle() {
@@ -131,43 +136,84 @@ checkForCredentialsFile() {
 }
 
 runTestOnBundle() {
-    echo "" 1>&2
-    echo " ~~~ Now testing the generated runner package: --run-self-test enabled ~~~" 1>&2
-    TEST_RUN_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-self-test.logs"
-    rm "${TEST_RUN_LOGS}" &>/dev/null || true
-    ( cd ${SCRIPT_CURRENT_DIR} && time ./test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true)
-    actualResult=$(grep "Self test completed successfully" "${TEST_RUN_LOGS}" || true)
+    testName="run-self-test"
+    if [[ $(checkTest "${testName}") = "not-performed" ]]; then
+        echo "" 1>&2
+        echo " ~~~ Now testing the generated runner package: --run-self-test enabled ~~~" 1>&2
+        TEST_RUN_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-self-test.logs"
+        rm "${TEST_RUN_LOGS}" &>/dev/null || true
+        ( cd ${SCRIPT_CURRENT_DIR} && time ./test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true )
+        actualResult=$(grep "Self test completed successfully" "${TEST_RUN_LOGS}" || true)
+        rememberTestAction "${testName}"
+     else
+        echo ""
+        echo "${testName} has already been performed, moving further..." 
+        echo ""
+    fi
 
     checkForCredentialsFile
 
-    echo "" 1>&2
-    echo " ~~~ Now testing the generated runner package: video capturing enabled ~~~" 1>&2
-    echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
-    echo " ~~~     [Run the challenge in the language bundle] ~~~" 1>&2
-    echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
-    echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
-    echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
-    cd ${SCRIPT_CURRENT_DIR} && time testRun || true
-    echo " ~~~     [Check if the video and source code files have been uploaded (look for log messages above)] ~~~" 1>&2
-    echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
-    read -t 10 -p "Hit ENTER or wait ten seconds"
+    testName=video-capturing-enabled-test
+    if [[ $(checkTest "${testName}") = "not-performed" ]]; then
+        echo "" 1>&2
+        echo " ~~~ Now testing the generated runner package: video capturing enabled ~~~" 1>&2
+        echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
+        echo " ~~~     [Run the challenge in the language bundle] ~~~" 1>&2
+        echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
+        echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
+        echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
+        cd ${SCRIPT_CURRENT_DIR} && time testRun || true
+        echo " ~~~     [Check if the video and source code files have been uploaded (look for log messages above)] ~~~" 1>&2
+        echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
+        rememberTestAction "${testName}"
+        read -t 10 -p "Hit ENTER or wait ten seconds" || true        
+    else
+        echo ""
+        echo "${testName} has already been performed, moving further..." 
+        echo ""
+    fi
 
-    echo "" 1>&2
-    echo " ~~~ Now testing the generated runner package: --no-video enabled ~~~" 1>&2
-    echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
-    echo " ~~~     [Run the challenge in the language bundle] ~~~" 1>&2
-    echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
-    echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
-    echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
-    cd ${SCRIPT_CURRENT_DIR} && time testRun --no-video || true
-    echo " ~~~     [Check if the source code files have been uploaded (look for log messages above)] ~~~" 1>&2
-    echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
-    read -t 10 -p "Hit ENTER or wait ten seconds"
+    testName=video-capturing-disabled-test
+    if [[ $(checkTest "{testName}") = "not-performed" ]]; then
+        echo "" 1>&2
+        echo " ~~~ Now testing the generated runner package: --no-video enabled ~~~" 1>&2
+        echo " ~~~     [Run command to install modules for a language bundle - see README (optional)] ~~~" 1>&2
+        echo " ~~~     [Run the challenge in the language bundle] ~~~" 1>&2
+        echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
+        echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
+        echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
+        cd ${SCRIPT_CURRENT_DIR} && time testRun --no-video || true
+        echo " ~~~     [Check if the source code files have been uploaded (look for log messages above)] ~~~" 1>&2
+        echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
+        rememberTestAction "video-capturing-disabled-test"
+        read -t 10 -p "Hit ENTER or wait ten seconds" || true       
+    else
+        echo ""
+        echo "${testName} has already been performed, moving further..."
+        echo ""
+    fi
+}
+
+rememberTestAction() {
+    testName=$1
+    touch "${TARGET_TEST_RESULTS_FOLDER}/${testName}"
+    echo "  "
+    echo "  ~~~ Test execution action saved in memory: ${TARGET_TEST_RESULTS_FOLDER}/${testName}"
+    echo "  "
+}
+
+checkTest() {    
+    if [[ -e "${TARGET_TEST_RESULTS_FOLDER}/${testName}" ]]; then
+        result="performed"
+    else
+        result="not-performed"
+    fi 
+    echo ${result}
 }
 
 downloadBundleAndExpand() {
-    TARGET_BUNDLE=runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip
-    TARGET_BUNDLE_FULLPATH=${SCRIPT_CURRENT_DIR}/build/${TARGET_BUNDLE}
+    TARGET_BUNDLE="runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
+    TARGET_BUNDLE_FULLPATH="${SCRIPT_CURRENT_DIR}/build/${TARGET_BUNDLE}"
     if [[ ! -e "${TARGET_BUNDLE_FULLPATH}" ]]; then
         echo "Downloading runner bundle for '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM} into ${SCRIPT_CURRENT_DIR}/build"
         curl https://get.accelerate.io/${TARGET_BUNDLE} \
@@ -188,9 +234,6 @@ testRun() {
     fi
 
     echo " ~~~~~~ Copying video and source artifacts to test-results folder ~~~~~~"
-    TARGET_TEST_RESULTS_FOLDER=${SCRIPT_CURRENT_DIR}/test-results/${TARGET_PLATFORM}/${TARGET_LANGUAGE}
-    mkdir -p ${TARGET_TEST_RESULTS_FOLDER}
-
     cp ${RUN_TEMP_DIR}/accelerate_runner/record/localstore/*.* ${TARGET_TEST_RESULTS_FOLDER}
     ls -lash ${TARGET_TEST_RESULTS_FOLDER}
 }
