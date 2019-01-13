@@ -121,7 +121,7 @@ runGenerateBundle() {
     echo " ~~~ Generating the runner package ~~~" 1>&2
     GENERATE_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-generate.logs"
     rm "${GENERATE_LOGS}" &>/dev/null || true
-    (cd ${SCRIPT_CURRENT_DIR} && time ./generate_language_platform_bundle.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${GENERATE_LOGS}" || true)
+    (cd ${SCRIPT_CURRENT_DIR} && time ../generate_language_platform_bundle.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${GENERATE_LOGS}" || true)
 }
 
 checkForCredentialsFile() {
@@ -142,7 +142,7 @@ runTestOnBundle() {
         echo " ~~~ Now testing the generated runner package: --run-self-test enabled ~~~" 1>&2
         TEST_RUN_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-self-test.logs"
         rm "${TEST_RUN_LOGS}" &>/dev/null || true
-        ( cd ${SCRIPT_CURRENT_DIR} && time ./test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true )
+        ( cd ${SCRIPT_CURRENT_DIR} && time ../test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true )
         actualResult=$(grep "Self test completed successfully" "${TEST_RUN_LOGS}" || true)
         rememberTestAction "${testName}"
      else
