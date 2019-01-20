@@ -29,27 +29,27 @@ Individual bundles that are generated using the `generate_language_platform_bund
 
 To bulk smoke test one or more bundles across multiple platforms that have been already created and uploaded to the http://get.accelerate.io/ can be done using a bunch of scripts:
 
-- `download_bundles_and_test_run_all.sh` - will detect the platform it is running on i.e. `linux`, `macos` or `windows` and download the respective language bundles for the respective platform and run various tests on them
+- `testing/download_bundles_and_test_run_all.sh` - will detect the platform it is running on i.e. `linux`, `macos` or `windows` and download the respective language bundles for the respective platform and run various tests on them
 - `test_run.bat` - will run test on a language bundle for Windows
 - `test_run.sh` - will run test on a language bundle for Linux or MacOS
 
 And supported by scripts like:
 
 - `runDockerContainer.sh` - run a docker instance and mount the current folder into it, to allow running the recorder and the challenges in an isolated environment
-- `sendCtrlCToRecorder.sh` - sends a Ctrl-C signal to the running JAR process on Linux/MacOS and a Ctrl-C to the batch on Windows
+- `testing/sendCtrlCToRecorder.sh` - sends a Ctrl-C signal to the running JAR process on Linux/MacOS and a Ctrl-C to the batch on Windows
 
 Steps to follow (all platforms):
 
 - Go to the http://intro.befaster.io... provided by the administrator to download the credentials config file
 - set the environment variable `CREDENTIALS_CONFIG_FILE` to point to this config file with the command `export CREDENTIALS_CONFIG_FILE="/path/to/the/downloaded/credentials.config"`
-- run `download_bundles_and_test_run_all.sh` in one terminal 
+- run `testing/download_bundles_and_test_run_all.sh` in one terminal 
 - wait for the run-self-test of a language to be performed or the message "run-self-test has already been performed, moving further..."
 - this moves to the second test "video-capturing-enabled-test"
 - open a second terminal and go to the `tdl-lord-of-runners/generate-language-platform-bundles` folder
 - in the second terminal, go to the `run_tmp/accelerate_runner` folder 
 - in the second terminal, depending on the language, run the build system for it i.e. `./gradlew run` for `java`, etc...
 - in the second terminal, follow the instructions on the screen to complete the respective round
-- either complete the whole challenge or after the current round, run the `tdl-lord-of-runners/generate-language-platform-bundles/sendCtrlCToRecorder.sh` in a separate terminal
+- either complete the whole challenge or after the current round, run the `tdl-lord-of-runners/generate-language-platform-bundles/testing/sendCtrlCToRecorder.sh` in a separate terminal
 - or switch to the first terminal and press `Ctrl-C`
 - in the first terminal, then please a key or wait for 10 seconds for the next recorder test to start
 - this moves to the third test "video-capturing-disabled-test"
@@ -60,8 +60,8 @@ Steps to follow (all platforms):
 
 Other usages of the above scripts:
 
-- `TARGET_LANGUAGES="java" ./download_bundles_and_test_run_all.sh`
-- `TARGET_LANGUAGES="java scala" ./download_bundles_and_test_run_all.sh`
+- `TARGET_LANGUAGES="java" ./testing/download_bundles_and_test_run_all.sh`
+- `TARGET_LANGUAGES="java scala" ./testing/download_bundles_and_test_run_all.sh`
 
 For Windows the below conventions will need to be followed:
 
@@ -80,4 +80,4 @@ Things to know about the manual tests:
 - outputs created are .log files, .mp4 video files and .srcs source archive files
 - each test step is remembered by the script via an empty file stored in the `test-results/[PLATFORM]/[LANGUAGE]` folder, known markers:  run-self-test, video-capturing-enabled-test, video-capturing-disabled-test
 - once a test is successfully completed it won't repeat it, but will be skipped for the next one and so forth, in order to repeat a test, delete the marker file in the `test-results/[platform]/[language]` folder
-- in Windows, the Ctrl-C action or the `sendCtrlCToRecorder.sh` behaves differently, the pause between tests does not happen it moves to the next test immediately
+- in Windows, the Ctrl-C action or the `testing/sendCtrlCToRecorder.sh` behaves differently, the pause between tests does not happen it moves to the next test immediately
