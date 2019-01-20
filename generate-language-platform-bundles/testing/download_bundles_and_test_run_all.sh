@@ -43,6 +43,7 @@ TARGET_LANGUAGES=${TARGET_LANGUAGES:-${AVAILABLE_LANGUAGES}}
 TARGET_TEST_RESULTS_FOLDER=""
 
 SCRIPT_CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_PARENT_DIR="$(realpath ${SCRIPT_CURRENT_DIR}/..)"
 
 passedTests=()
 failedTests=()
@@ -113,15 +114,15 @@ displayPassFailSummary(){
 
 cleanup() {
   echo "Cleaning up run_tmp and work folders" 1>&2	
-  rm -fr "${SCRIPT_CURRENT_DIR}/run_tmp" || true
-  rm -fr "${SCRIPT_CURRENT_DIR}/work" || true
+  rm -fr "${SCRIPT_PARENT_DIR}/run_tmp" || true
+  rm -fr "${SCRIPT_PARENT_DIR}/work" || true
 }
 
 runGenerateBundle() {
     echo " ~~~ Generating the runner package ~~~" 1>&2
     GENERATE_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-generate.logs"
     rm "${GENERATE_LOGS}" &>/dev/null || true
-    (cd ${SCRIPT_CURRENT_DIR} && time ../generate_language_platform_bundle.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${GENERATE_LOGS}" || true)
+    (cd ${SCRIPT_CURRENT_DIR} && time ./${SCRIPT_PARENT_DIR}/generate_language_platform_bundle.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${GENERATE_LOGS}" || true)
 }
 
 checkForCredentialsFile() {
@@ -131,8 +132,8 @@ checkForCredentialsFile() {
        exit -1
     fi
 
-    echo "Copying ${CREDENTIALS_CONFIG_FILE:-} to ${SCRIPT_CURRENT_DIR}/run_tmp/accelerate_runner/config/credentials.config"
-    cp ${CREDENTIALS_CONFIG_FILE} ${SCRIPT_CURRENT_DIR}/run_tmp/accelerate_runner/config/credentials.config
+    echo "Copying ${CREDENTIALS_CONFIG_FILE:-} to ${SCRIPT_PARENT_DIR}/run_tmp/accelerate_runner/config/credentials.config"
+    cp ${CREDENTIALS_CONFIG_FILE} ${SCRIPT_PARENT_DIR}/run_tmp/accelerate_runner/config/credentials.config
 }
 
 runTestOnBundle() {
@@ -142,7 +143,7 @@ runTestOnBundle() {
         echo " ~~~ Now testing the generated runner package: --run-self-test enabled ~~~" 1>&2
         TEST_RUN_LOGS="${SCRIPT_CURRENT_DIR}/logs/tdl-runner-${TARGET_PLATFORM}-${TARGET_LANGUAGE}-self-test.logs"
         rm "${TEST_RUN_LOGS}" &>/dev/null || true
-        ( cd ${SCRIPT_CURRENT_DIR} && time ../test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true )
+        ( cd ${SCRIPT_PARENT_DIR} && time ./test_run.sh "${TARGET_LANGUAGE}" "${TARGET_PLATFORM}" &> "${TEST_RUN_LOGS}" || true )
         actualResult=$(grep "Self test completed successfully" "${TEST_RUN_LOGS}" || true)
         rememberTestAction "${testName}"
      else
@@ -162,7 +163,7 @@ runTestOnBundle() {
         echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
         echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
         echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
-        cd ${SCRIPT_CURRENT_DIR} && time testRun || true
+        cd ${SCRIPT_PARENT_DIR} && time testRun || true
         echo " ~~~     [Check if the video and source code files have been uploaded (look for log messages above)] ~~~" 1>&2
         echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
         rememberTestAction "${testName}"
@@ -183,7 +184,7 @@ runTestOnBundle() {
         echo " ~~~     [Through a script or manually write some changes to one or more source files in the language package bundle] ~~~" 1>&2
         echo " ~~~     [Deploy the changes via the CLI - deploy command] ~~~" 1>&2
         echo " ~~~     [Press Ctrl-C to break execution or send a stop recorder signal to the running Jar] ~~~" 1>&2
-        cd ${SCRIPT_CURRENT_DIR} && time testRun --no-video || true
+        cd ${SCRIPT_PARENT_DIR} && time testRun --no-video || true
         echo " ~~~     [Check if the source code files have been uploaded (look for log messages above)] ~~~" 1>&2
         echo " ~~~     [Check if the source code files have been correctly created in the 'test-results' folder] ~~~" 1>&2
         rememberTestAction "video-capturing-disabled-test"
@@ -214,20 +215,22 @@ checkTest() {
 
 downloadBundle() {
     TARGET_BUNDLE="runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
-    TARGET_BUNDLE_FULLPATH="${SCRIPT_CURRENT_DIR}/build/${TARGET_BUNDLE}"
+    TARGET_BUNDLE_FULLPATH="${SCRIPT_PARENT_DIR}/build/${TARGET_BUNDLE}"
     if [[ ! -e "${TARGET_BUNDLE_FULLPATH}" ]]; then
-        echo "Downloading runner bundle for '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM} into ${SCRIPT_CURRENT_DIR}/build"
+        mkdir -p ${SCRIPT_PARENT_DIR}/build
+
+        echo "Downloading runner bundle for '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM} into ${SCRIPT_PARENT_DIR}/build"
         curl https://get.accelerate.io/${TARGET_BUNDLE} \
              --output ${TARGET_BUNDLE_FULLPATH}
     else
-        echo "Runner bundle for '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM} already present in ${SCRIPT_CURRENT_DIR}/build"
+        echo "Runner bundle for '${TARGET_LANGUAGE}' language running on '${TARGET_PLATFORM} already present in ${SCRIPT_PARENT_DIR}/build"
     fi
 }
 
 testRun() {
     FLAGS=$@
 
-    RUN_TEMP_DIR="${SCRIPT_CURRENT_DIR}/run_tmp"
+    RUN_TEMP_DIR="${SCRIPT_PARENT_DIR}/run_tmp"
     if [[ "${DETECTED_PLATFORM}" = "windows" ]]; then
         "${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.bat" ${FLAGS} || true
     else
