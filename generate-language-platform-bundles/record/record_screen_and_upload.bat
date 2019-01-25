@@ -13,7 +13,6 @@ set CMD_LINE_ARGS=%*
 
 echo "Running using packaged JRE:"
 @echo on
-@rem Execute Record
 %JAVA_BIN%                               ^
      -jar %JAR_FILE%                     ^
      --config %PARAM_CONFIG_FILE%        ^

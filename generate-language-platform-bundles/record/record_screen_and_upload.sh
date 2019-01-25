@@ -10,12 +10,6 @@ PARAM_SOURCECODE_DIR="${SCRIPT_CURRENT_DIR}"
 
 echo "Running using packaged JRE:"
 set -ex
-
-#
-# Can also be resolved by using -Dlogback.configurationFile="./path/to/a/new/logback.xml"
-# instead of the below          -Dlogback.enableJansi="true"
-# to make logback use a different config xml file containing the new setting to switch on Jansi
-#
 exec "$JAVA_BIN"                    \
   -Dlogback.enableJansi="true"      \
   -jar "$JAR_FILE"                  \

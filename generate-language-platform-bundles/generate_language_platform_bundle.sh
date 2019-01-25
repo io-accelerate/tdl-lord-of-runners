@@ -3,9 +3,10 @@
 set -e
 
 SCRIPT_CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SELF_VERSION=$(cat "${SCRIPT_CURRENT_DIR}/version.self.txt")
 
 # Prepare output dir
-BUILD_DIR="${SCRIPT_CURRENT_DIR}/build"
+BUILD_DIR="${SCRIPT_CURRENT_DIR}/build/v${SELF_VERSION}"
 mkdir -p "${BUILD_DIR}"
 
 # Prepare working directory
