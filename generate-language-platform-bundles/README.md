@@ -1,11 +1,16 @@
 # Generate language + platform bundles
 
 ### Create bundle
-(note: the below command can be run in a Linux/MacOS environment, or in a Windows environment via Cygwin)
+(note: the below command can be run in a Linux/MacOS environment)
 ```
 ./generate_language_platform_bundle.sh java macos
 ./generate_language_platform_bundle.sh java linux
 ./generate_language_platform_bundle.sh java windows
+```
+
+To generate all bundles run
+```
+./generate_all_bundles.sh
 ```
 
 ### Test bundle Linux/MacOS environment
