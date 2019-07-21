@@ -27,7 +27,7 @@ set BUNDLE_ZIP=%SCRIPT_CURRENT_DIR%\build\runner-for-%TARGET_LANGUAGE%-%TARGET_P
 unzip "%BUNDLE_ZIP%" -d "%RUN_TEMP_DIR%"
 
 @rem Invoke JRE
-%RUN_TEMP_DIR%\accelerate_runner\record_screen_and_upload.bat --run-self-test
+%RUN_TEMP_DIR%\accelerate_runner\record_and_upload.bat --run-self-test
 
 :fail
 echo "Syntax is: $0 language platform"

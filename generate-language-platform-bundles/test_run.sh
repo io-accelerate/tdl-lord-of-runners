@@ -44,4 +44,4 @@ if [[ "$(detectPlatform)" = "windows" ]]; then
 	FILE_EXT=bat
 fi
 
-"${RUN_TEMP_DIR}/accelerate_runner/record_screen_and_upload.${FILE_EXT}" --run-self-test
+"${RUN_TEMP_DIR}/accelerate_runner/record_and_upload.${FILE_EXT}" --run-self-test
