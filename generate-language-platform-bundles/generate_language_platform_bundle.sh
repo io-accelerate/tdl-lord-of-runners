@@ -44,19 +44,13 @@ mkdir -p  "${RUNNER_DIR}/record/bin"
 ${SCRIPT_CURRENT_DIR}/download.sh "${REMOTE_RECORDER_JAR}" "${RUNNER_DIR}/record/bin/record-and-upload.jar"
 
 # 4. Place Recording script
-# TODO Keep only one once migrated to the new name
-rm -f "${RUNNER_DIR}/record_screen_and_upload.sh"
 rm -f "${RUNNER_DIR}/record_and_upload.sh"
-rm -f "${RUNNER_DIR}/record_screen_and_upload.bat"
 rm -f "${RUNNER_DIR}/record_and_upload.bat"
 FILE_EXT="sh"
 if [ "${TARGET_PLATFORM}" == "windows" ]; then
    FILE_EXT="bat"
 fi		
 LOCAL_RECORDER_SCRIPT="${SCRIPT_CURRENT_DIR}/record/record_and_upload.${FILE_EXT}"
-# TODO Keep only one once migrated to the new name
-echo "cp ${LOCAL_RECORDER_SCRIPT} ${RUNNER_DIR}/record_screen_and_upload.${FILE_EXT}"
-cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_screen_and_upload.${FILE_EXT}"
 echo "cp ${LOCAL_RECORDER_SCRIPT} ${RUNNER_DIR}/record_and_upload.${FILE_EXT}"
 cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_and_upload.${FILE_EXT}"
 
