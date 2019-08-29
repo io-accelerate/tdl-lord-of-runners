@@ -24,19 +24,21 @@ ${block.l}        * You are presented with your current progress and a list of a
 ${block.l}        * You trigger one of the actions by typing it on the console.
 ${block.l}        * After the action feedback is presented, the execution will stop.
 ${block.l}
-<#assign colW = 60>
-${block.l}   +------+-${("-----------------------------------------------")?right_pad(colW, "-")}+
-${block.l}   | Step | ${("The usual workflow                             ")?right_pad(colW)}|
-${block.l}   +------+-${("-----------------------------------------------")?right_pad(colW, "-")}+
-${block.l}   |  1.  | ${("Run this file."                                 )?right_pad(colW)}|
-${block.l}   |  2.  | ${("Start a challenge by typing \"start\"."         )?right_pad(colW)}|
-${block.l}   |  3.  | ${("Read description from the \"challenges\" folder")?right_pad(colW)}|
-${block.l}   |  4.  | ${("Implement the required method in"               )?right_pad(colW)}|
-${block.l}   |      | ${("  "+solutionsLocation+""                        )?right_pad(colW)}|
-${block.l}   |  5.  | ${("Deploy to production by typing \"deploy\"."     )?right_pad(colW)}|
-${block.l}   |  6.  | ${("Observe output, check for failed requests."     )?right_pad(colW)}|
-${block.l}   |  7.  | ${("If passed, go to step 3."                       )?right_pad(colW)}|
-${block.l}   +------+-${("-----------------------------------------------")?right_pad(colW, "-")}+
+<#assign colW = 70>
+${block.l}   +------+-${("------------------"                                           )?right_pad(colW, "-")}+
+${block.l}   | Step | ${("The usual workflow"                                           )?right_pad(colW)}|
+${block.l}   +------+-${("------------------"                                           )?right_pad(colW, "-")}+
+${block.l}   |  1.  | ${("Run this file."                                               )?right_pad(colW)}|
+${block.l}   |  2.  | ${("Start a challenge by typing \"start\"."                       )?right_pad(colW)}|
+${block.l}   |  3.  | ${("Read the description from the \"challenges\" folder."         )?right_pad(colW)}|
+${block.l}   |  4.  | ${("Locate the file corresponding to your current challenge in:"  )?right_pad(colW)}|
+${block.l}   |      | ${("  "+solutionsLocation+""                                      )?right_pad(colW)}|
+${block.l}   |  5.  | ${("Write your solution in place of the following exception:"     )?right_pad(colW)}|
+${block.l}   |      | ${("  \""+exceptionLine+"\""                                      )?right_pad(colW)}|
+${block.l}   |  6.  | ${("Deploy to production by typing \"deploy\"."                   )?right_pad(colW)}|
+${block.l}   |  7.  | ${("Observe the output, check for failed requests."               )?right_pad(colW)}|
+${block.l}   |  8.  | ${("If passed, go to step 1."                                     )?right_pad(colW)}|
+${block.l}   +------+-${("----"                                                         )?right_pad(colW, "-")}+
 ${block.l}
 ${block.l}   You are encouraged to change this project as you please:
 ${block.l}        * You can use your preferred libraries.
