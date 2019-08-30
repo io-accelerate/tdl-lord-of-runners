@@ -35,7 +35,7 @@ ${block.l}   |  3.  | ${("Read the description from the \"challenges\" folder." 
 ${block.l}   |  4.  | ${("Locate the file corresponding to your current challenge in:"      )?right_pad(colW)}|
 ${block.l}   |      | ${("  "+solutionsLocation+""                                          )?right_pad(colW)}|
 ${block.l}   |  5.  | ${("Replace the following placeholder exception with your solution:"  )?right_pad(colW)}|
-${block.l}   |      | ${("  \""+exceptionLine+"\""                                          )?right_pad(colW)}|
+${block.l}   |      | ${("  "+exceptionLine+""                                              )?right_pad(colW)}|
 ${block.l}   |  6.  | ${("Deploy to production by typing \"deploy\"."                       )?right_pad(colW)}|
 ${block.l}   |  7.  | ${("Observe the output, check for failed requests."                   )?right_pad(colW)}|
 ${block.l}   |  8.  | ${("If passed, go to step 1."                                         )?right_pad(colW)}|
