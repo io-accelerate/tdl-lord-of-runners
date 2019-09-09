@@ -50,11 +50,17 @@ FILE_EXT="sh"
 if [ "${TARGET_PLATFORM}" == "windows" ]; then
    FILE_EXT="bat"
 fi		
-LOCAL_RECORDER_SCRIPT="${SCRIPT_CURRENT_DIR}/record/record_and_upload.${FILE_EXT}"
+LOCAL_RECORDER_SCRIPT="${SCRIPT_CURRENT_DIR}/resources/record_and_upload.${FILE_EXT}"
 echo "cp ${LOCAL_RECORDER_SCRIPT} ${RUNNER_DIR}/record_and_upload.${FILE_EXT}"
 cp "${LOCAL_RECORDER_SCRIPT}" "${RUNNER_DIR}/record_and_upload.${FILE_EXT}"
 
-# 5. Bundle
+# 5. Create the user config and challenges folders
+mkdir -p "${RUNNER_DIR}/challenges"
+cp "${SCRIPT_CURRENT_DIR}/resources/challenges/README.md" "${RUNNER_DIR}/challenges/README.md"
+mkdir -p "${RUNNER_DIR}/config"
+cp "${SCRIPT_CURRENT_DIR}/resources/config/credentials.config.lives.here" "${RUNNER_DIR}/config/credentials.config.lives.here"
+
+# 6. Bundle
 BUNDLE_ZIP_NAME="runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
 BUNDLE_ZIP_FILE="${BUILD_DIR}/${BUNDLE_ZIP_NAME}"
 BUNDLE_ZIP_MANIFEST="${BUILD_DIR}/${BUNDLE_ZIP_NAME}.meta"
