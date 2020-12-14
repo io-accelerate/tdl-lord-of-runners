@@ -8,6 +8,9 @@ PARAM_CONFIG_FILE="${SCRIPT_CURRENT_DIR}/config/credentials.config"
 PARAM_STORE_DIR="${SCRIPT_CURRENT_DIR}/record/localstore"
 PARAM_SOURCECODE_DIR="${SCRIPT_CURRENT_DIR}"
 
+# For MacOS newer than 11.0.0  - allow the terminal to run the Java runtime
+xattr -rd com.apple.quarantine "${SCRIPT_CURRENT_DIR}" >/dev/null 2>&1 || true
+
 echo "Running using packaged JRE:"
 set -ex
 exec "$JAVA_BIN"                    \
