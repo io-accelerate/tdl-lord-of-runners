@@ -17,6 +17,15 @@ class SupportedLanguage {
             "sbt test",
             "./src/main/scala/befaster/solutions",
             "throw new SolutionNotImplementedException()");
+
+    static final SupportedLanguage KOTLIN = new SupportedLanguage(
+            CommentBlock.JAVADOC,
+            "Run this file from the IDE.",
+            "./gradlew run",
+            "./gradlew test -i",
+            "./src/main/kotlin/solutions",
+            "TODO(\"Solution not implemented\")");
+
     static final SupportedLanguage RUBY = new SupportedLanguage(
             CommentBlock.HASHES,
             "Run this file from the IDE. Set the working directory to the root of the repo.",
