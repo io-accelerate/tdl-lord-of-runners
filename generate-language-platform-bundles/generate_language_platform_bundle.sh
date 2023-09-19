@@ -39,7 +39,7 @@ unzip "${WORK_DIR}/jre.zip" -d "${RUNNER_DIR}/jre"
 
 # 3. Get Recording JAR
 RECORDER_VERSION=$(cat "${SCRIPT_CURRENT_DIR}/version.recorder.txt")
-REMOTE_RECORDER_JAR="https://github.com/julianghionoiu/record-and-upload/releases/download/v${RECORDER_VERSION}/record-and-upload-${TARGET_PLATFORM}-${RECORDER_VERSION}.jar"
+REMOTE_RECORDER_JAR="https://github.com/julianghionoiu/record-and-upload/releases/download/v${RECORDER_VERSION}/record-and-upload-${TARGET_PLATFORM}-${RECORDER_VERSION}-all.jar"
 mkdir -p  "${RUNNER_DIR}/record/bin"
 "${SCRIPT_CURRENT_DIR}/download.sh" "${REMOTE_RECORDER_JAR}" "${RUNNER_DIR}/record/bin/record-and-upload.jar"
 
