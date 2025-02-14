@@ -3,9 +3,15 @@
 ### Create bundle
 (note: the below command can be run in a Linux/MacOS environment)
 ```
-./generate_language_platform_bundle.sh java macos
-./generate_language_platform_bundle.sh java linux
-./generate_language_platform_bundle.sh java windows
+./generate_language_platform_bundle.sh csharp macos
+./generate_language_platform_bundle.sh csharp linux
+./generate_language_platform_bundle.sh csharp windows
+./generate_language_platform_bundle.sh fsharp macos
+./generate_language_platform_bundle.sh fsharp linux
+./generate_language_platform_bundle.sh fsharp windows
+./generate_language_platform_bundle.sh vbnet macos
+./generate_language_platform_bundle.sh vbnet linux
+./generate_language_platform_bundle.sh vbnet windows
 ```
 
 To generate all bundles run
