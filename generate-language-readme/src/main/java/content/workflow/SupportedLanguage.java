@@ -8,14 +8,14 @@ class SupportedLanguage {
             "Run this file from the IDE.",
             "./gradlew run",
             "./gradlew test -i",
-            "./src/main/java/befaster/solutions",
+            "./src/main/java/io/accelerate/solutions",
             "throw new SolutionNotImplementedException()");
     static final SupportedLanguage SCALA = new SupportedLanguage(
             CommentBlock.JAVADOC,
             "Run this file from the IDE.",
             "sbt run",
             "sbt test",
-            "./src/main/scala/befaster/solutions",
+            "./src/main/scala/io/accelerate/solutions",
             "throw new SolutionNotImplementedException()");
 
     static final SupportedLanguage KOTLIN = new SupportedLanguage(
