@@ -25,7 +25,7 @@ TARGET_PLATFORM="$2"
 
 # 1. Get Runner
 RUNNER_VERSION=$(cat "${SCRIPT_CURRENT_DIR}/version.runner.${TARGET_LANGUAGE}.txt")
-REMOTE_RUNNER_ZIP="https://github.com/julianghionoiu/tdl-runner-${TARGET_LANGUAGE}/archive/v${RUNNER_VERSION}.zip"
+REMOTE_RUNNER_ZIP="https://github.com/io-accelerate/tdl-runner-${TARGET_LANGUAGE}/archive/v${RUNNER_VERSION}.zip"
 echo "Download the language runner from ${REMOTE_RUNNER_ZIP}"
 "${SCRIPT_CURRENT_DIR}/download.sh" "${REMOTE_RUNNER_ZIP}" "${WORK_DIR}/runner.zip"
 unzip "${WORK_DIR}/runner.zip" -d "${WORK_DIR}/."
