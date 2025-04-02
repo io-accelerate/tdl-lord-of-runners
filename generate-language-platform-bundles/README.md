@@ -3,15 +3,9 @@
 ### Create bundle
 (note: the below command can be run in a Linux/MacOS environment)
 ```
-./generate_language_platform_bundle.sh csharp macos
-./generate_language_platform_bundle.sh csharp linux
-./generate_language_platform_bundle.sh csharp windows
-./generate_language_platform_bundle.sh fsharp macos
-./generate_language_platform_bundle.sh fsharp linux
-./generate_language_platform_bundle.sh fsharp windows
-./generate_language_platform_bundle.sh vbnet macos
-./generate_language_platform_bundle.sh vbnet linux
-./generate_language_platform_bundle.sh vbnet windows
+./generate_language_platform_bundle.sh java macos
+./generate_language_platform_bundle.sh java linux
+./generate_language_platform_bundle.sh java windows
 ```
 
 To generate all bundles run
@@ -36,6 +30,10 @@ test_run.bat java windows
 ```
 (cd ./build && aws s3 sync . s3://get.accelerate.io/)
 ```
+
+### Invalidate CloudFront cache
+
+Login to AWS and run create an invalidation for the "get.accelerate.io" CloudFront distribution.
 
 ### Manually testing
 
