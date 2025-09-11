@@ -3,9 +3,12 @@
 ### Create bundle
 (note: the below command can be run in a Linux/MacOS environment)
 ```
-./generate_language_platform_bundle.sh java macos
-./generate_language_platform_bundle.sh java linux
-./generate_language_platform_bundle.sh java windows
+./generate_language_platform_bundle.sh java macos x64
+./generate_language_platform_bundle.sh java macos aarch64
+./generate_language_platform_bundle.sh java linux x64
+./generate_language_platform_bundle.sh java linux aarch64
+./generate_language_platform_bundle.sh java windows x64
+./generate_language_platform_bundle.sh java windows aarch64
 ```
 
 To generate all bundles run
@@ -15,13 +18,15 @@ To generate all bundles run
 
 ### Test bundle Linux/MacOS environment
 ```
-./test_run.sh java macos
-./test_run.sh java linux
+./test_run.sh java macos x64
+./test_run.sh java macos aarch64
+./test_run.sh java linux x64
+./test_run.sh java linux aarch64
 ```
 
 ### Test bundle Windows environment
 ```
-test_run.bat java windows
+test_run.bat java windows x64
 ```
 
 ### Sync to S3 bucket

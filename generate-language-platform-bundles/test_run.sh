@@ -8,16 +8,17 @@ rm -Rf "${RUN_TEMP_DIR}"
 mkdir -p "${RUN_TEMP_DIR}"
 
 # Read input
-if [ $# -ne 2 ]; then
-  echo "Syntax is: $0 language platform"
+if [ $# -ne 3 ]; then
+  echo "Syntax is: $0 language platform architecture"
   exit 1
 fi
 TARGET_LANGUAGE="$1"
 TARGET_PLATFORM="$2"
+TARGET_ARCH="$3"
 
 # Extract
 SELF_VERSION=$(cat "${SCRIPT_CURRENT_DIR}/version.self.txt")
-BUNDLE_ZIP="${SCRIPT_CURRENT_DIR}/build/v${SELF_VERSION}/runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}.zip"
+BUNDLE_ZIP="${SCRIPT_CURRENT_DIR}/build/v${SELF_VERSION}/runner-for-${TARGET_LANGUAGE}-${TARGET_PLATFORM}-${TARGET_ARCH}.zip"
 unzip "${BUNDLE_ZIP}" -d "${RUN_TEMP_DIR}"
 
 # Invoke JRE
@@ -44,4 +45,4 @@ if [[ "$(detectPlatform)" = "windows" ]]; then
 	FILE_EXT=bat
 fi
 
-"${RUN_TEMP_DIR}/accelerate_runner/record_and_upload.${FILE_EXT}" --run-self-test
+"${RUN_TEMP_DIR}/accelerate_runner/track_code_and_upload.${FILE_EXT}" --help
