@@ -3,12 +3,12 @@
 ### Create bundle
 (note: the below command can be run in a Linux/MacOS environment)
 ```
-./generate_language_platform_bundle.sh java macos x64
-./generate_language_platform_bundle.sh java macos aarch64
-./generate_language_platform_bundle.sh java linux x64
-./generate_language_platform_bundle.sh java linux aarch64
-./generate_language_platform_bundle.sh java windows x64
-./generate_language_platform_bundle.sh java windows aarch64
+./generate_language_platform_bundle.sh nodejs macos x64
+./generate_language_platform_bundle.sh nodejs macos aarch64
+./generate_language_platform_bundle.sh nodejs linux x64
+./generate_language_platform_bundle.sh nodejs linux aarch64
+./generate_language_platform_bundle.sh nodejs windows x64
+./generate_language_platform_bundle.sh nodejs windows aarch64
 ```
 
 To generate all bundles run
